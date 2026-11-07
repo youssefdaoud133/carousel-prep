@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="logo/carousel-prep-icon-dark.png">
+    <img src="logo/carousel-prep-icon.png" alt="Carousel Prep logo" width="160">
+  </picture>
+</p>
+
 # Carousel Prep
 
 Prepare photos for an Instagram carousel post in one pass:
@@ -82,4 +89,13 @@ Tests and lint:
 ```bash
 cd backend && uv run pytest && uv run ruff check . && uv run ruff format --check .
 cd frontend && npm run build && npm run lint
+```
+
+## Logo
+
+The source artwork is `logo/Split Panorama Carousel Icon.png`. Every derived file (cleaned icon,
+dark-mode version, header logo, favicon, home-screen and manifest icons) is generated from it:
+
+```bash
+uv run --project backend python logo/build_assets.py
 ```

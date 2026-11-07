@@ -20,6 +20,8 @@ import { Toasts } from './components/Toasts'
 import { useToasts } from './hooks/useToasts'
 import { slideName, slugify } from './naming'
 import type { Photo } from './types'
+import brandMarkDark from './assets/logo-dark.png'
+import brandMark from './assets/logo.png'
 
 const INSTAGRAM_MAX_SLIDES = 20
 const UPLOAD_CONCURRENCY = 3
@@ -268,7 +270,10 @@ export default function App() {
       <header className="sticky top-0 z-30 border-b border-rule bg-table/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:px-6">
           <div className="flex items-center gap-2.5">
-            <Logomark />
+            <picture>
+              <source srcSet={brandMarkDark} media="(prefers-color-scheme: dark)" />
+              <img src={brandMark} alt="" width={35} height={28} className="h-7 w-auto" />
+            </picture>
             <span className="text-lg font-semibold tracking-tight">Carousel Prep</span>
           </div>
           <div className="ml-auto flex items-center gap-3">
@@ -444,23 +449,5 @@ export default function App() {
       <SwipeViewer slides={slides} start={viewerStart} onClose={() => setViewerStart(null)} />
       <Toasts toasts={toasts} dismiss={dismiss} />
     </div>
-  )
-}
-
-/** Two portrait frames joined by a dashed seam: a landscape cut into two slides. */
-function Logomark() {
-  return (
-    <svg viewBox="0 0 28 20" className="h-5 w-7" aria-hidden>
-      <rect x="1" y="1" width="26" height="18" rx="2.5" className="fill-ink" />
-      <line
-        x1="14"
-        y1="1"
-        x2="14"
-        y2="19"
-        className="stroke-marker"
-        strokeWidth="2"
-        strokeDasharray="2.5 2"
-      />
-    </svg>
   )
 }
