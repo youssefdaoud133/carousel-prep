@@ -1,0 +1,42 @@
+[project]
+name = "carousel-prep-backend"
+version = "0.1.0"
+description = "Prepares photos for Instagram carousel posts"
+readme = "README.md"
+authors = [
+    { name = "wowda", email = "youssefdaoud0122@gmail.com" }
+]
+requires-python = ">=3.15"
+dependencies = [
+    "fastapi>=0.162.2",
+    "pillow>=13.0.0",
+    "pillow-heif>=1.8.1",
+    "python-multipart>=0.0.33",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[project.scripts]
+carousel-prep = "backend:main"
+
+[build-system]
+requires = ["uv_build>=0.13.7,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "httpx2>=2.16.0",
+    "pytest>=9.2.0",
+    "ruff>=0.17.4",
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.uv.build-backend]
+module-name = "backend"
