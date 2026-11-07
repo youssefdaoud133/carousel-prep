@@ -10,6 +10,7 @@ import {
   type RenderRequest,
 } from './api'
 import { ACCEPTED, EmptyDrop, WindowDrop } from './components/DropZone'
+import { LogoPanel } from './components/LogoPanel'
 import { PhotoList } from './components/PhotoList'
 import { PreviewStrip } from './components/PreviewStrip'
 import { Segmented } from './components/Segmented'
@@ -36,7 +37,9 @@ export default function App() {
   const [title, setTitle] = useState('')
   const [fitMode, setFitMode] = useState<FitMode>('crop')
   const [padColor, setPadColor] = useState<PadColor>('white')
-  const [logo] = useState<LogoOptions>(DEFAULT_LOGO)
+  const [logo, setLogo] = useState<LogoOptions>(DEFAULT_LOGO)
+  const [logoUrl, setLogoUrl] = useState<string | null>(null)
+  const [logoUploading, setLogoUploading] = useState(false)
   const [rendered, setRendered] = useState<{ key: string; slides: PreviewSlide[] }>({
     key: '',
     slides: [],
@@ -70,6 +73,10 @@ export default function App() {
       if (err instanceof DOMException && err.name === 'AbortError') return
       if (err instanceof ApiError && err.sessionExpired) {
         setPhotos([])
+        setLogoUrl((url) => {
+          if (url) URL.revokeObjectURL(url)
+          return null
+        })
         push('error', 'Your session expired after 2 hours without activity. Add your photos again.')
         startSession()
         return
@@ -137,6 +144,38 @@ export default function App() {
     }
   }
 
+  // --- logo ----------------------------------------------------------------
+
+  async function uploadLogo(file: File) {
+    if (!sessionId) return
+    setLogoUploading(true)
+    try {
+      await api.uploadLogo(sessionId, file)
+      setLogoUrl((old) => {
+        if (old) URL.revokeObjectURL(old)
+        return URL.createObjectURL(file)
+      })
+      setLogo((l) => ({ ...l, enabled: true }))
+    } catch (err) {
+      handleError(err)
+    } finally {
+      setLogoUploading(false)
+    }
+  }
+
+  async function removeLogo() {
+    if (!sessionId) return
+    setLogoUrl((old) => {
+      if (old) URL.revokeObjectURL(old)
+      return null
+    })
+    try {
+      await api.deleteLogo(sessionId)
+    } catch (err) {
+      handleError(err)
+    }
+  }
+
   // --- preview -------------------------------------------------------------
 
   const renderRequest = useMemo<RenderRequest>(
@@ -144,9 +183,9 @@ export default function App() {
       order: photos.map((p) => ({ id: p.id, focus: p.focus })),
       fit_mode: fitMode,
       pad_color: padColor,
-      logo,
+      logo: { ...logo, enabled: logo.enabled && logoUrl !== null },
     }),
-    [photos, fitMode, padColor, logo],
+    [photos, fitMode, padColor, logo, logoUrl],
   )
 
   // The preview is "updating" whenever the latest settings differ from what was last rendered.
@@ -267,7 +306,7 @@ export default function App() {
       )}
 
       <main className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[320px_minmax(0,1fr)] lg:items-start">
-        <aside className="space-y-6 rounded-2xl bg-sheet p-5 ring-1 ring-rule lg:sticky lg:top-20">
+        <aside className="space-y-6 rounded-2xl bg-sheet p-5 ring-1 ring-rule lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto">
           <section className="space-y-2">
             <label htmlFor="title" className="block font-semibold">
               Post title
@@ -322,6 +361,15 @@ export default function App() {
               fill the frame.
             </p>
           </section>
+
+          <LogoPanel
+            options={logo}
+            onChange={setLogo}
+            previewUrl={logoUrl}
+            uploading={logoUploading}
+            onUpload={uploadLogo}
+            onRemove={removeLogo}
+          />
         </aside>
 
         <div className="min-w-0 space-y-8">
