@@ -7,6 +7,15 @@ Prepare photos for Instagram carousel posts: portraits stay single slides, lands
 - **frontend/**: React + TypeScript + Vite + Tailwind CSS
 - **backend/**: Python + FastAPI + Pillow (managed with uv)
 
+## Run with Docker
+
+```bash
+docker compose up --build
+```
+
+Open http://localhost:8080. Use another port with `PORT=9000 docker compose up --build`.
+Stop with `docker compose down`.
+
 ## Development (without Docker)
 
 ```bash
@@ -17,4 +26,9 @@ cd backend && uv run carousel-prep
 cd frontend && npm install && npm run dev
 ```
 
-Docker setup follows in a later step.
+Tests and lint:
+
+```bash
+cd backend && uv run pytest && uv run ruff check .
+cd frontend && npm run build && npm run lint
+```

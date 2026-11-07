@@ -1,0 +1,15 @@
+name: carousel-prep
+
+services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "${PORT:-8080}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
