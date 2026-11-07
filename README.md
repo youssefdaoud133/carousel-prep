@@ -16,7 +16,7 @@
 <p align="center">
   <img alt="Runs on your computer" src="https://img.shields.io/badge/runs-on%20your%20computer-262626">
   <img alt="Private by design" src="https://img.shields.io/badge/photos-stay%20private-e1306c">
-  <img alt="One command with Docker" src="https://img.shields.io/badge/start-one%20command-2496ed?logo=docker&logoColor=white">
+  <a href="https://hub.docker.com/r/youssefdaoud133/carousel-prep"><img alt="Docker Hub" src="https://img.shields.io/badge/Docker%20Hub-one%20command-2496ed?logo=docker&logoColor=white"></a>
 </p>
 
 <p align="center">
@@ -70,24 +70,32 @@ sports clubs and teams · event organisers · anyone who wants their posts to lo
 ## Get started (about 5 minutes, no coding)
 
 Carousel Prep runs inside **Docker**, a free app that runs this tool for you so there is nothing
-else to install.
+else to install. It works on Windows, Mac (Intel and Apple Silicon) and Linux.
 
 1. **Install Docker Desktop** from [docker.com](https://www.docker.com/products/docker-desktop/)
    and open it once. Wait until it says it is running.
-2. **Download Carousel Prep.** On this page, click the green **Code** button, then
-   **Download ZIP**, and unzip it anywhere you like.
-3. **Open a terminal in that folder.**
-   - **Windows:** open the folder, click the address bar, type `cmd` and press Enter.
-   - **Mac:** right-click the folder and choose **New Terminal at Folder**.
-   - **Linux:** right-click inside the folder and choose **Open in Terminal**.
-4. **Start it** by typing this and pressing Enter (the first start takes a few minutes):
+2. **Open a terminal.**
+   - **Windows:** open the Start menu, type `PowerShell` and press Enter.
+   - **Mac:** open **Terminal** (press <kbd>⌘</kbd> + <kbd>Space</kbd> and type "Terminal").
+   - **Linux:** open your Terminal app.
+3. **Paste this command and press Enter.** The first time, it downloads the app (about a
+   minute):
    ```bash
-   docker compose up
+   docker run -d --name carousel-prep -p 8080:8080 --restart unless-stopped youssefdaoud133/carousel-prep
    ```
-5. **Open [http://localhost:8080](http://localhost:8080)** in your browser. That's it! 🎉
+4. **Open [http://localhost:8080](http://localhost:8080)** in your browser. That's it! 🎉
 
-To stop, press <kbd>Ctrl</kbd> + <kbd>C</kbd> in the terminal. Next time, only steps 3 to 5
-are needed, and it starts in seconds.
+It keeps running in the background and starts again with Docker Desktop, so next time just
+open the link.
+
+| To… | Run |
+| --- | --- |
+| Stop it | `docker stop carousel-prep` |
+| Start it again | `docker start carousel-prep` |
+| Update to the newest version | `docker rm -f carousel-prep && docker pull youssefdaoud133/carousel-prep`, then step 3 again |
+
+> Port 8080 already in use? Change the first number, e.g. `-p 9000:8080`, then open
+> `http://localhost:9000`.
 
 ## Make your first carousel
 
@@ -160,9 +168,29 @@ Yes, as long as your phone is on the same Wi-Fi as the computer running it. Open
 | `frontend/` | React 19, TypeScript 7, Vite 8, Tailwind CSS 4, dnd-kit; served by nginx in Docker |
 | `backend/` | Python 3.15, FastAPI, Pillow 13, pillow-heif; managed with uv |
 
-The backend keeps uploads in a temporary per-browser session (cleared after 2 hours idle).
-Nothing is written outside the container. Use another port with
-`PORT=9000 docker compose up --build`, and rebuild with `--build` after changing the code.
+One Docker image runs a single Python process that serves both the API (`/api/*`) and the built
+web app. Uploads live in a temporary per-browser session (cleared after 2 hours idle); nothing is
+written outside the container.
+
+### Build and run from source
+
+```bash
+docker compose up --build          # http://localhost:8080 (PORT=9000 to change)
+```
+
+Without `--build`, `docker compose up` pulls the published image from Docker Hub instead.
+
+### Publishing to Docker Hub
+
+Pushing a version tag publishes `youssefdaoud133/carousel-prep` for `linux/amd64` and
+`linux/arm64` through [`.github/workflows/docker-publish.yml`](.github/workflows/docker-publish.yml):
+
+```bash
+git tag v1.0.0 && git push origin v1.0.0   # -> :1.0.0, :1.0 and :latest
+```
+
+The workflow needs two repository secrets: `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` (a Docker
+Hub access token with Read & Write permission).
 
 ### Image processing
 

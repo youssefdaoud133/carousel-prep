@@ -2,12 +2,15 @@ from __future__ import annotations
 
 import base64
 import io
+import os
 import zipfile
+from pathlib import Path
 from typing import Annotated
 from urllib.parse import quote
 
 from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.concurrency import run_in_threadpool
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response
 
 from .imaging import (
@@ -31,12 +34,14 @@ from .schemas import (
     UploadResult,
 )
 from .sessions import NotFoundError, Session, SessionStore, StoredImage
+from .static import mount_frontend
 
 MAX_FILE_BYTES = 50 * 1024 * 1024
 MAX_IMAGES = 40
 PREVIEW_SIZE = (540, 675)
 
 app = FastAPI(title="Carousel Prep API")
+app.add_middleware(GZipMiddleware, minimum_size=1024)
 store = SessionStore()
 
 
@@ -207,3 +212,9 @@ def export(session_id: str, req: RenderRequest) -> Response:
         media_type="application/zip",
         headers={"Content-Disposition": disposition, "X-Slide-Count": str(len(slides))},
     )
+
+
+# Single-image deployment: serve the built web app from this process too.
+# Registered last so its catch-all route never shadows the API.
+if static_dir := os.environ.get("STATIC_DIR"):
+    mount_frontend(app, Path(static_dir))

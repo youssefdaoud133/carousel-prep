@@ -1,15 +1,10 @@
 name: carousel-prep
 
 services:
-  backend:
-    build: ./backend
-    restart: unless-stopped
-
-  frontend:
-    build: ./frontend
+  app:
+    # Pulls the published image; `docker compose up --build` builds from source instead.
+    image: youssefdaoud133/carousel-prep:latest
+    build: .
     ports:
-      - "${PORT:-8080}:80"
-    depends_on:
-      backend:
-        condition: service_healthy
+      - "${PORT:-8080}:8080"
     restart: unless-stopped
