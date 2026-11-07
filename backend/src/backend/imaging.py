@@ -271,8 +271,8 @@ def build_slides(
 
 
 def encode_jpeg(img: Image.Image, quality: int = JPEG_QUALITY) -> bytes:
+    # No optimize=True: Pillow then encodes into a fixed-size buffer that very detailed
+    # photos can overflow ("broken data stream"). Streaming output has no such limit.
     buf = io.BytesIO()
-    img.convert("RGB").save(
-        buf, "JPEG", quality=quality, subsampling=0, optimize=True, icc_profile=_SRGB_ICC
-    )
+    img.convert("RGB").save(buf, "JPEG", quality=quality, subsampling=0, icc_profile=_SRGB_ICC)
     return buf.getvalue()

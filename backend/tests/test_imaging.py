@@ -1,4 +1,5 @@
 import io
+import random
 
 import pytest
 from PIL import Image
@@ -301,3 +302,10 @@ def test_encode_jpeg_produces_srgb_jpeg() -> None:
     assert img.format == "JPEG"
     assert img.size == SLIDE_SIZE
     assert img.info.get("icc_profile")
+
+
+def test_encode_jpeg_handles_high_detail_images() -> None:
+    # Pure noise is the worst case for JPEG size; optimize=True needs a big enough buffer.
+    noisy = Image.frombytes("RGB", (2000, 1500), random.Random(1).randbytes(2000 * 1500 * 3))
+    data = encode_jpeg(noisy, quality=95)
+    assert Image.open(io.BytesIO(data)).size == (2000, 1500)
