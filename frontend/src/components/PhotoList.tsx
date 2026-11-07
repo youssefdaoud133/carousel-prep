@@ -17,7 +17,7 @@ import {
   useSortable,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { ImagePlus, LoaderCircle, X } from 'lucide-react'
+import { Crop, ImagePlus, LoaderCircle, X } from 'lucide-react'
 import type { Photo } from '../types'
 
 interface Props {
@@ -25,10 +25,11 @@ interface Props {
   pending: { key: string; name: string }[]
   onReorder: (photos: Photo[]) => void
   onRemove: (id: string) => void
+  onAdjust: (id: string) => void
   onAdd: () => void
 }
 
-export function PhotoList({ photos, pending, onReorder, onRemove, onAdd }: Props) {
+export function PhotoList({ photos, pending, onReorder, onRemove, onAdjust, onAdd }: Props) {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
@@ -64,7 +65,13 @@ export function PhotoList({ photos, pending, onReorder, onRemove, onAdd }: Props
       <SortableContext items={photos.map((p) => p.id)} strategy={rectSortingStrategy}>
         <ul className="grid grid-cols-[repeat(auto-fill,minmax(112px,1fr))] gap-3">
           {photos.map((photo, i) => (
-            <PhotoCard key={photo.id} photo={photo} position={i + 1} onRemove={onRemove} />
+            <PhotoCard
+              key={photo.id}
+              photo={photo}
+              position={i + 1}
+              onRemove={onRemove}
+              onAdjust={onAdjust}
+            />
           ))}
           {pending.map((p) => (
             <li
@@ -95,10 +102,12 @@ function PhotoCard({
   photo,
   position,
   onRemove,
+  onAdjust,
 }: {
   photo: Photo
   position: number
   onRemove: (id: string) => void
+  onAdjust: (id: string) => void
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: photo.id,
@@ -141,14 +150,26 @@ function PhotoCard({
         </span>
         {split && <span className="shrink-0 text-marker">2 slides</span>}
       </div>
-      <button
-        type="button"
-        onClick={() => onRemove(photo.id)}
-        aria-label={`Remove ${photo.filename}`}
-        className="absolute right-1.5 top-1.5 rounded-full bg-ink/80 p-1 text-sheet opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
-      >
-        <X className="size-3.5" aria-hidden />
-      </button>
+      <div className="absolute right-1.5 top-1.5 flex gap-1 opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 pointer-coarse:opacity-100">
+        <button
+          type="button"
+          onClick={() => onAdjust(photo.id)}
+          aria-label={`Adjust crop of ${photo.filename}`}
+          title="Adjust crop"
+          className="rounded-full bg-ink/80 p-1 text-sheet hover:bg-ink"
+        >
+          <Crop className="size-3.5" aria-hidden />
+        </button>
+        <button
+          type="button"
+          onClick={() => onRemove(photo.id)}
+          aria-label={`Remove ${photo.filename}`}
+          title="Remove"
+          className="rounded-full bg-ink/80 p-1 text-sheet hover:bg-ink"
+        >
+          <X className="size-3.5" aria-hidden />
+        </button>
+      </div>
     </li>
   )
 }

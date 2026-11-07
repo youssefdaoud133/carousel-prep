@@ -2,7 +2,6 @@
 name = "carousel-prep-backend"
 version = "0.1.0"
 description = "Prepares photos for Instagram carousel posts"
-readme = "README.md"
 authors = [
     { name = "wowda", email = "youssefdaoud0122@gmail.com" }
 ]

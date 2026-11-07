@@ -5,13 +5,14 @@ interface Props {
   slides: PreviewSlide[]
   slug: string
   updating: boolean
+  onOpen: (position: number) => void
 }
 
 /**
  * Slides laid out in carousel order. Halves of a split landscape sit flush against each other
  * with a dashed seam marker, so you can check that the swipe reads as one picture.
  */
-export function PreviewStrip({ slides, slug, updating }: Props) {
+export function PreviewStrip({ slides, slug, updating, onOpen }: Props) {
   const groups: PreviewSlide[][] = []
   for (const slide of slides) {
     const last = groups.at(-1)
@@ -31,14 +32,21 @@ export function PreviewStrip({ slides, slug, updating }: Props) {
           <li key={`${group[0].image_id}-${group[0].index}`} className="flex flex-col gap-2">
             <div className="relative flex shadow-sm ring-1 ring-rule">
               {group.map((slide) => (
-                <img
+                <button
                   key={slide.index}
-                  src={slide.data_url}
-                  alt={`Slide ${slide.index}`}
-                  className="h-72 w-auto sm:h-80"
-                  width={540}
-                  height={675}
-                />
+                  type="button"
+                  onClick={() => onOpen(slide.index - 1)}
+                  aria-label={`View slide ${slide.index} full size`}
+                  className="cursor-zoom-in focus-visible:z-10"
+                >
+                  <img
+                    src={slide.data_url}
+                    alt=""
+                    className="block h-72 w-auto sm:h-80"
+                    width={540}
+                    height={675}
+                  />
+                </button>
               ))}
               {group.length === 2 && (
                 <span

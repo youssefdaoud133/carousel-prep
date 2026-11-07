@@ -10,10 +10,12 @@ import {
   type RenderRequest,
 } from './api'
 import { ACCEPTED, EmptyDrop, WindowDrop } from './components/DropZone'
+import { CropDialog } from './components/CropDialog'
 import { LogoPanel } from './components/LogoPanel'
 import { PhotoList } from './components/PhotoList'
 import { PreviewStrip } from './components/PreviewStrip'
 import { Segmented } from './components/Segmented'
+import { SwipeViewer } from './components/SwipeViewer'
 import { Toasts } from './components/Toasts'
 import { useToasts } from './hooks/useToasts'
 import { slideName, slugify } from './naming'
@@ -45,6 +47,8 @@ export default function App() {
     slides: [],
   })
   const [exporting, setExporting] = useState(false)
+  const [cropId, setCropId] = useState<string | null>(null)
+  const [viewerStart, setViewerStart] = useState<number | null>(null)
   const [startError, setStartError] = useState<string | null>(null)
   const fileInput = useRef<HTMLInputElement>(null)
   const { toasts, push, dismiss } = useToasts()
@@ -387,6 +391,7 @@ export default function App() {
                   pending={pending}
                   onReorder={setPhotos}
                   onRemove={removePhoto}
+                  onAdjust={setCropId}
                   onAdd={openPicker}
                 />
               </section>
@@ -411,7 +416,12 @@ export default function App() {
                   </p>
                 </div>
                 {slides.length > 0 ? (
-                  <PreviewStrip slides={slides} slug={slug} updating={updating} />
+                  <PreviewStrip
+                    slides={slides}
+                    slug={slug}
+                    updating={updating}
+                    onOpen={setViewerStart}
+                  />
                 ) : (
                   <div className="grid h-72 place-items-center rounded-xl border border-dashed border-rule text-sm text-graphite">
                     {updating || pending.length ? 'Rendering preview…' : 'No slides yet'}
@@ -423,6 +433,15 @@ export default function App() {
         </div>
       </main>
 
+      <CropDialog
+        photo={photos.find((p) => p.id === cropId) ?? null}
+        fitMode={fitMode}
+        onFocusChange={(id, focus) =>
+          setPhotos((all) => all.map((p) => (p.id === id ? { ...p, focus } : p)))
+        }
+        onClose={() => setCropId(null)}
+      />
+      <SwipeViewer slides={slides} start={viewerStart} onClose={() => setViewerStart(null)} />
       <Toasts toasts={toasts} dismiss={dismiss} />
     </div>
   )
