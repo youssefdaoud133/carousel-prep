@@ -51,7 +51,7 @@ export function PreviewStrip({ slides, slug, updating, onOpen }: Props) {
               {group.length === 2 && (
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-y-0 left-1/2 -translate-x-1/2 border-l-2 border-dashed border-marker/80"
+                  className="pointer-events-none absolute inset-y-0 left-1/2 -translate-x-1/2 border-l-2 border-dashed border-seam/80"
                 />
               )}
             </div>

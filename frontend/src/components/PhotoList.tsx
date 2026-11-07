@@ -137,7 +137,7 @@ function PhotoCard({
         {split && (
           <span
             aria-hidden
-            className="absolute inset-y-1 left-1/2 border-l border-dashed border-marker"
+            className="absolute inset-y-1 left-1/2 border-l border-dashed border-seam"
           />
         )}
         <span className="absolute left-1.5 top-1.5 rounded bg-ink/80 px-1.5 text-xs font-medium tabular-nums text-sheet">

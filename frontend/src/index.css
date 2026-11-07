@@ -17,6 +17,7 @@
   --color-marker: #e1306c;
   --color-marker-ink: #ffffff;
   --color-marker-soft: #fdeef3;
+  --color-seam: #e0412f; /* split-landscape cut lines: original red, matches the logo */
   --color-danger: #ed4956;
   --color-ok: #58c322;
 }
@@ -36,6 +37,7 @@
     --color-marker: #f0457e;
     --color-marker-ink: #ffffff;
     --color-marker-soft: #3a1322;
+    --color-seam: #ff5b47;
     --color-danger: #ff6b78;
     --color-ok: #78de45;
     color-scheme: dark;
@@ -52,6 +54,7 @@
   --color-marker: #f0457e;
   --color-marker-ink: #ffffff;
   --color-marker-soft: #3a1322;
+  --color-seam: #ff5b47;
   --color-danger: #ff6b78;
   --color-ok: #78de45;
   color-scheme: dark;

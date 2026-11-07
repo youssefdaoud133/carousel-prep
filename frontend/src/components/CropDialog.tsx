@@ -78,7 +78,7 @@ export function CropDialog({ photo, fitMode, onFocusChange, onClose }: Props) {
                   }}
                 >
                   {landscape && (
-                    <span className="absolute inset-y-0 left-1/2 border-l-2 border-dashed border-marker" />
+                    <span className="absolute inset-y-0 left-1/2 border-l-2 border-dashed border-seam" />
                   )}
                 </div>
               )}
