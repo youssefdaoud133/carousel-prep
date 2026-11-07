@@ -17,6 +17,8 @@
   <img alt="Runs on your computer" src="https://img.shields.io/badge/runs-on%20your%20computer-262626">
   <img alt="Private by design" src="https://img.shields.io/badge/photos-stay%20private-e1306c">
   <a href="https://hub.docker.com/r/youssefdaoud133/carousel-prep"><img alt="Docker Hub" src="https://img.shields.io/badge/Docker%20Hub-one%20command-2496ed?logo=docker&logoColor=white"></a>
+  <a href="https://hub.docker.com/r/youssefdaoud133/carousel-prep"><img alt="Docker pulls" src="https://img.shields.io/docker/pulls/youssefdaoud133/carousel-prep?logo=docker&logoColor=white&color=2496ed"></a>
+  <a href="https://hub.docker.com/r/youssefdaoud133/carousel-prep/tags"><img alt="Download size" src="https://img.shields.io/docker/image-size/youssefdaoud133/carousel-prep/latest?label=download&color=262626"></a>
 </p>
 
 <p align="center">
@@ -70,7 +72,9 @@ sports clubs and teams · event organisers · anyone who wants their posts to lo
 ## Get started (about 5 minutes, no coding)
 
 Carousel Prep runs inside **Docker**, a free app that runs this tool for you so there is nothing
-else to install. It works on Windows, Mac (Intel and Apple Silicon) and Linux.
+else to install. The app is published on
+[Docker Hub](https://hub.docker.com/r/youssefdaoud133/carousel-prep) and works on Windows, Mac
+(Intel and Apple Silicon) and Linux.
 
 1. **Install Docker Desktop** from [docker.com](https://www.docker.com/products/docker-desktop/)
    and open it once. Wait until it says it is running.
@@ -78,8 +82,8 @@ else to install. It works on Windows, Mac (Intel and Apple Silicon) and Linux.
    - **Windows:** open the Start menu, type `PowerShell` and press Enter.
    - **Mac:** open **Terminal** (press <kbd>⌘</kbd> + <kbd>Space</kbd> and type "Terminal").
    - **Linux:** open your Terminal app.
-3. **Paste this command and press Enter.** The first time, it downloads the app (about a
-   minute):
+3. **Paste this command and press Enter.** The first time, Docker downloads the app from
+   Docker Hub (about 90 MB):
    ```bash
    docker run -d --name carousel-prep -p 8080:8080 --restart unless-stopped youssefdaoud133/carousel-prep
    ```
@@ -165,7 +169,7 @@ Yes, as long as your phone is on the same Wi-Fi as the computer running it. Open
 
 | Part | Tech |
 | --- | --- |
-| `frontend/` | React 19, TypeScript 7, Vite 8, Tailwind CSS 4, dnd-kit; served by nginx in Docker |
+| `frontend/` | React 19, TypeScript 7, Vite 8, Tailwind CSS 4, dnd-kit; built into the image and served by the API |
 | `backend/` | Python 3.15, FastAPI, Pillow 13, pillow-heif; managed with uv |
 
 One Docker image runs a single Python process that serves both the API (`/api/*`) and the built
@@ -182,15 +186,35 @@ Without `--build`, `docker compose up` pulls the published image from Docker Hub
 
 ### Publishing to Docker Hub
 
-Pushing a version tag publishes `youssefdaoud133/carousel-prep` for `linux/amd64` and
-`linux/arm64` through [`.github/workflows/docker-publish.yml`](.github/workflows/docker-publish.yml):
+The image is published as
+[`youssefdaoud133/carousel-prep`](https://hub.docker.com/r/youssefdaoud133/carousel-prep) for
+`linux/amd64` and `linux/arm64`, tagged with the full version, the minor version and `latest`.
+
+**Automatically (recommended):** pushing a version tag runs
+[`.github/workflows/docker-publish.yml`](.github/workflows/docker-publish.yml), which builds both
+platforms on GitHub and pushes them:
 
 ```bash
-git tag v1.0.0 && git push origin v1.0.0   # -> :1.0.0, :1.0 and :latest
+git tag v1.1.0 && git push origin v1.1.0   # -> :1.1.0, :1.1 and :latest
 ```
 
-The workflow needs two repository secrets: `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` (a Docker
-Hub access token with Read & Write permission).
+It needs two repository secrets: `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` (a Docker Hub access
+token with Read & Write permission).
+
+**Manually:** after `docker login`, from the repository root:
+
+```bash
+# once per boot, if this machine can't build ARM images yet
+docker run --privileged --rm tonistiigi/binfmt:qemu-v10.2.3 --install arm64
+
+docker buildx build --platform linux/amd64,linux/arm64 \
+  -t youssefdaoud133/carousel-prep:1.1.0 \
+  -t youssefdaoud133/carousel-prep:1.1 \
+  -t youssefdaoud133/carousel-prep:latest \
+  --push .
+```
+
+If the upload drops partway, run the same command again: already uploaded layers are skipped.
 
 ### Image processing
 
