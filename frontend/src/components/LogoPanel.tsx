@@ -35,11 +35,11 @@ export function LogoPanel({ options, onChange, previewUrl, uploading, onUpload, 
           aria-labelledby="logo-heading"
           onClick={() => set({ enabled: !options.enabled })}
           className={`relative h-6 w-11 rounded-full transition-colors ${
-            options.enabled ? 'bg-marker' : 'bg-rule'
+            options.enabled ? 'bg-ig' : 'bg-rule'
           }`}
         >
           <span
-            className={`absolute top-0.5 size-5 rounded-full bg-sheet shadow transition-[left] ${
+            className={`absolute top-0.5 size-5 rounded-full bg-white shadow transition-[left] ${
               options.enabled ? 'left-5.5' : 'left-0.5'
             }`}
           />
@@ -117,7 +117,7 @@ export function LogoPanel({ options, onChange, previewUrl, uploading, onUpload, 
                     title={c.label}
                     onClick={() => set({ corner: c.value })}
                     className={`absolute size-5 rounded-sm transition-colors ${c.className} ${
-                      active ? 'bg-marker' : 'bg-rule hover:bg-graphite/50'
+                      active ? 'bg-ig' : 'bg-rule hover:bg-graphite/50'
                     }`}
                   />
                 )

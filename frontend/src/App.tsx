@@ -285,7 +285,7 @@ export default function App() {
               onClick={exportZip}
               disabled={!!exportBlocker || exporting}
               title={exportBlocker ?? undefined}
-              className="inline-flex items-center gap-2 rounded-lg bg-marker px-4 py-2 text-sm font-semibold text-marker-ink shadow-sm transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:brightness-100"
+              className="inline-flex items-center gap-2 rounded-lg bg-ig-strong px-4 py-2 text-sm font-semibold text-marker-ink shadow-sm transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:brightness-100"
             >
               {exporting ? (
                 <LoaderCircle className="size-4 animate-spin" aria-hidden />

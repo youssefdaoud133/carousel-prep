@@ -64,7 +64,7 @@ export function EmptyDrop({ onBrowse }: { onBrowse: () => void }) {
       onClick={onBrowse}
       className="group grid w-full place-items-center gap-4 rounded-2xl border-2 border-dashed border-rule bg-sheet px-6 py-20 text-center transition-colors hover:border-marker"
     >
-      <span className="grid size-14 place-items-center rounded-full bg-marker-soft text-marker">
+      <span className="grid size-14 place-items-center rounded-full bg-ig text-white">
         <ImagePlus className="size-6" aria-hidden />
       </span>
       <span className="space-y-1">

@@ -21,9 +21,9 @@ from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "logo" / "Split Panorama Carousel Icon.png"
 
-INK_LIGHT = (0xEC, 0xEE, 0xF2)  # dark-mode ink
-SHEET_DARK = (0x1B, 0x1E, 0x24)  # dark-mode surface
-TILE = (0xEE, 0xF1, 0xF4)  # light-table surface
+INK_LIGHT = (0xF5, 0xF5, 0xF5)  # dark-mode ink
+SHEET_DARK = (0x12, 0x12, 0x12)  # dark-mode surface
+TILE = (0xFA, 0xFA, 0xFA)  # light app surface
 RED_DARK = (0xFF, 0x5B, 0x47)  # dark-mode marker
 
 
