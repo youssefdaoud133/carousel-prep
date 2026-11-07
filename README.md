@@ -101,6 +101,31 @@ open the link.
 > Port 8080 already in use? Change the first number, e.g. `-p 9000:8080`, then open
 > `http://localhost:9000`.
 
+### Keep it on, even after you restart your computer
+
+The command in step 3 already tells Docker to bring Carousel Prep back by itself. The only thing
+left is to make Docker start when your computer does:
+
+1. **Make Docker start with your computer.**
+   - **Windows and Mac:** open Docker Desktop, click the ⚙️ **Settings** icon at the top, go to
+     **General**, tick **Start Docker Desktop when you sign in to your computer**, then click
+     **Apply & restart**.
+   - **Linux:** run this once in the terminal:
+     ```bash
+     sudo systemctl enable docker
+     ```
+     (Using Docker Desktop on Linux instead? Tick the same setting as on Windows and Mac.)
+2. **Already started Carousel Prep with an older command?** Run this once so it always comes
+   back:
+   ```bash
+   docker update --restart unless-stopped carousel-prep
+   ```
+3. **Check it works:** restart your computer, sign in, wait for Docker to finish starting (up to
+   a minute), then open [http://localhost:8080](http://localhost:8080).
+
+> If you stop it with `docker stop carousel-prep`, it stays off after a restart too. Run
+> `docker start carousel-prep` once and it's back to starting on its own.
+
 ## Make your first carousel
 
 1. **Drop your photos** anywhere on the page, or click **choose files**.
