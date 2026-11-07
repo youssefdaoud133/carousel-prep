@@ -1,1 +1,63 @@
 @import "tailwindcss";
+@import "@fontsource-variable/schibsted-grotesk";
+
+/* Light table: cool white surface, ink type, china-marker red for cuts and marks. */
+@theme {
+  --font-sans: "Schibsted Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --color-table: #eef1f4;
+  --color-sheet: #ffffff;
+  --color-ink: #16181d;
+  --color-graphite: #5b6270;
+  --color-rule: #d6dbe2;
+  --color-marker: #e0412f;
+  --color-marker-ink: #ffffff;
+  --color-marker-soft: #fdebe8;
+  --color-danger: #b42318;
+  --color-ok: #1f7a4d;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-table: #121418;
+    --color-sheet: #1b1e24;
+    --color-ink: #eceef2;
+    --color-graphite: #9aa2af;
+    --color-rule: #2d323b;
+    --color-marker: #ff5b47;
+    --color-marker-ink: #16181d;
+    --color-marker-soft: #3a1f1b;
+    --color-danger: #ff8a7a;
+    --color-ok: #5fd39a;
+  }
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  @apply bg-table text-ink font-sans antialiased;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-marker);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Thin, unobtrusive scrollbar for the preview strip. */
+.strip {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-rule) transparent;
+}
