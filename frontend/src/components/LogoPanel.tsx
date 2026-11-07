@@ -125,7 +125,7 @@ export function LogoPanel({ options, onChange, previewUrl, uploading, onUpload, 
             </div>
             <p className="text-sm text-graphite">
               {CORNERS.find((c) => c.value === options.corner)?.label} corner. On split landscapes
-              the logo only appears on the second half.
+              it appears once, on the {options.corner.endsWith('left') ? 'first' : 'second'} half.
             </p>
           </div>
 

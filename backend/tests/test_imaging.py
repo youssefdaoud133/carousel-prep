@@ -279,18 +279,30 @@ def test_build_slides_custom_size_for_previews() -> None:
     assert [s.size for s in slides] == [(216, 270), (216, 270)]
 
 
-def test_build_slides_logo_on_portraits_and_second_half_of_split_only() -> None:
+@pytest.mark.parametrize(
+    ("corner", "probe", "expected"),
+    [
+        # Left corners: logo on the FIRST half, so it sits at the photo's left edge.
+        (Corner.TOP_LEFT, (60, 60), [True, True, False, True]),
+        (Corner.BOTTOM_LEFT, (60, H - 60), [True, True, False, True]),
+        # Right corners: logo on the SECOND half, at the photo's right edge.
+        (Corner.TOP_RIGHT, (W - 60, 60), [True, False, True, True]),
+        (Corner.BOTTOM_RIGHT, (W - 60, H - 60), [True, False, True, True]),
+    ],
+)
+def test_build_slides_logo_once_per_split_on_the_corner_side(
+    corner: Corner, probe: tuple[int, int], expected: list[bool]
+) -> None:
     white = (255, 255, 255)
     sources = [
-        Source(solid((800, 1000), white)),  # portrait  -> slide 1 (logo)
-        Source(solid((1500, 1000), white)),  # landscape -> slides 2 (no logo), 3 (logo)
-        Source(solid((800, 1000), white)),  # portrait  -> slide 4 (logo)
+        Source(solid((800, 1000), white)),  # portrait  -> slide 1
+        Source(solid((1500, 1000), white)),  # landscape -> slides 2 (left), 3 (right)
+        Source(solid((800, 1000), white)),  # portrait  -> slide 4
     ]
-    logo = LogoSettings(Corner.TOP_LEFT, size_pct=10, margin_pct=4)
+    logo = LogoSettings(corner, size_pct=10, margin_pct=4)
     slides = build_slides(sources, RenderSettings(), logo=red_logo(), logo_settings=logo)
 
-    has_logo = [s.getpixel((60, 60)) == (255, 0, 0) for s in slides]
-    assert has_logo == [True, False, True, True]
+    assert [s.getpixel(probe) == (255, 0, 0) for s in slides] == expected
 
 
 # --- encoding -------------------------------------------------------------

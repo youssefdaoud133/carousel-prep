@@ -11,7 +11,8 @@ Prepare photos for an Instagram carousel post in one pass:
   `lisbon_weekend_picture_2.jpg`, … and downloaded as `lisbon_weekend.zip`, containing a
   `lisbon_weekend/` folder.
 - An optional **logo** goes in a chosen corner with adjustable size, margin and opacity. On a split
-  landscape it only appears on the second half.
+  landscape it appears once, at the outer edge of the full photo: on the first half for left
+  corners, on the second half for right corners.
 
 ## Run
 

@@ -245,15 +245,20 @@ def build_slides(
 ) -> list[Image.Image]:
     """Turn ordered source images into ordered carousel slides.
 
-    The logo goes on every portrait slide but only on the second half of a split
-    landscape, so a swiped pair reads as one image with one logo.
+    The logo goes on every portrait slide but on only one half of a split landscape, so a
+    swiped pair reads as one image with one logo: the first half for left corners and the
+    second half for right corners, which keeps it at the outer edge of the full photo.
     """
+    left_corner = logo_settings is not None and logo_settings.corner in (
+        Corner.TOP_LEFT,
+        Corner.BOTTOM_LEFT,
+    )
     slides: list[Image.Image] = []
     wants_logo: list[bool] = []
     for src in sources:
         if classify(src.image.size) is Orientation.LANDSCAPE:
             slides.extend(split_landscape(src.image, settings.size, src.focus))
-            wants_logo.extend([False, True])
+            wants_logo.extend([left_corner, not left_corner])
         else:
             slides.append(
                 fit_portrait(
