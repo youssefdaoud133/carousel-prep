@@ -278,11 +278,18 @@ def test_build_slides_custom_size_for_previews() -> None:
     assert [s.size for s in slides] == [(216, 270), (216, 270)]
 
 
-def test_build_slides_applies_logo_to_every_slide() -> None:
-    sources = [Source(solid((800, 1000), (255, 255, 255))), Source(solid((1500, 1000), (255,) * 3))]
+def test_build_slides_logo_on_portraits_and_second_half_of_split_only() -> None:
+    white = (255, 255, 255)
+    sources = [
+        Source(solid((800, 1000), white)),  # portrait  -> slide 1 (logo)
+        Source(solid((1500, 1000), white)),  # landscape -> slides 2 (no logo), 3 (logo)
+        Source(solid((800, 1000), white)),  # portrait  -> slide 4 (logo)
+    ]
     logo = LogoSettings(Corner.TOP_LEFT, size_pct=10, margin_pct=4)
     slides = build_slides(sources, RenderSettings(), logo=red_logo(), logo_settings=logo)
-    assert all(s.getpixel((60, 60)) == (255, 0, 0) for s in slides)
+
+    has_logo = [s.getpixel((60, 60)) == (255, 0, 0) for s in slides]
+    assert has_logo == [True, False, True, True]
 
 
 # --- encoding -------------------------------------------------------------

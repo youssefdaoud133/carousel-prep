@@ -243,20 +243,30 @@ def build_slides(
     logo: Image.Image | None = None,
     logo_settings: LogoSettings | None = None,
 ) -> list[Image.Image]:
-    """Turn ordered source images into ordered carousel slides."""
+    """Turn ordered source images into ordered carousel slides.
+
+    The logo goes on every portrait slide but only on the second half of a split
+    landscape, so a swiped pair reads as one image with one logo.
+    """
     slides: list[Image.Image] = []
+    wants_logo: list[bool] = []
     for src in sources:
         if classify(src.image.size) is Orientation.LANDSCAPE:
             slides.extend(split_landscape(src.image, settings.size, src.focus))
+            wants_logo.extend([False, True])
         else:
             slides.append(
                 fit_portrait(
                     src.image, settings.size, settings.fit_mode, settings.pad_color, src.focus
                 )
             )
+            wants_logo.append(True)
 
     if logo is not None and logo_settings is not None:
-        slides = [apply_logo(s, logo, logo_settings) for s in slides]
+        slides = [
+            apply_logo(s, logo, logo_settings) if want else s
+            for s, want in zip(slides, wants_logo, strict=True)
+        ]
     return slides
 
 
