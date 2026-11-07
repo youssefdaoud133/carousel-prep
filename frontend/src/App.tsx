@@ -333,7 +333,7 @@ export default function App() {
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Lisbon weekend"
+              placeholder="e.g. Sunset in Luxor"
               maxLength={120}
               className="w-full rounded-lg border border-rule bg-sheet px-3 py-2 placeholder:text-graphite/70 focus:border-marker focus:outline-none"
             />

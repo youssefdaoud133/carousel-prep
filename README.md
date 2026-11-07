@@ -53,7 +53,7 @@ swipe that photographers and brands use, without spending an evening in an editi
   horizon you care about.
 - ©️ **Your logo on every slide.** Pick a corner, size and transparency. On a split photo it
   appears once, not twice.
-- 🏷️ **Tidy file names.** Type "Summer in Lisbon" and get `summer_in_lisbon_picture_1.jpg`,
+- 🏷️ **Tidy file names.** Type "Sunset in Luxor" and get `sunset_in_luxor_picture_1.jpg`,
   `_2`, `_3`… numbered in posting order.
 - 👀 **See it before you post.** A live preview updates as you work, and a swipe viewer shows the
   carousel the way it looks on a phone.
