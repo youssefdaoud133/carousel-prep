@@ -103,7 +103,7 @@ export function LogoPanel({ options, onChange, previewUrl, uploading, onUpload, 
             <div
               role="radiogroup"
               aria-label="Logo corner"
-              className="relative aspect-4/5 w-20 shrink-0 rounded-md bg-table ring-1 ring-rule"
+              className="relative aspect-4/5 w-20 shrink-0 rounded-md bg-well ring-1 ring-rule"
             >
               {CORNERS.map((c) => {
                 const active = options.corner === c.value

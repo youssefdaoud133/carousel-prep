@@ -13,7 +13,7 @@ interface Props<T extends string> {
 /** Accessible single-choice control (radio group styled as a segmented switch). */
 export function Segmented<T extends string>({ label, value, options, onChange }: Props<T>) {
   return (
-    <div role="radiogroup" aria-label={label} className="flex rounded-lg bg-table p-1 gap-1">
+    <div role="radiogroup" aria-label={label} className="flex rounded-lg bg-well p-1 gap-1">
       {options.map((opt) => {
         const active = opt.value === value
         return (

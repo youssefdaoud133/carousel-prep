@@ -16,7 +16,9 @@ import { PhotoList } from './components/PhotoList'
 import { PreviewStrip } from './components/PreviewStrip'
 import { Segmented } from './components/Segmented'
 import { SwipeViewer } from './components/SwipeViewer'
+import { ThemeSwitch } from './components/ThemeSwitch'
 import { Toasts } from './components/Toasts'
+import { useTheme } from './hooks/useTheme'
 import { useToasts } from './hooks/useToasts'
 import { slideName, slugify } from './naming'
 import type { Photo } from './types'
@@ -54,6 +56,7 @@ export default function App() {
   const [startError, setStartError] = useState<string | null>(null)
   const fileInput = useRef<HTMLInputElement>(null)
   const { toasts, push, dismiss } = useToasts()
+  const theme = useTheme()
 
   const slug = slugify(title)
   const slideCount = photos.reduce((n, p) => n + p.slides, 0)
@@ -270,13 +273,19 @@ export default function App() {
       <header className="sticky top-0 z-30 border-b border-rule bg-table/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:px-6">
           <div className="flex items-center gap-2.5">
-            <picture>
-              <source srcSet={brandMarkDark} media="(prefers-color-scheme: dark)" />
-              <img src={brandMark} alt="" width={35} height={28} className="h-7 w-auto" />
-            </picture>
-            <span className="text-lg font-semibold tracking-tight">Carousel Prep</span>
+            <img
+              src={theme.resolved === 'dark' ? brandMarkDark : brandMark}
+              alt=""
+              width={35}
+              height={28}
+              className="h-7 w-auto"
+            />
+            <span className="hidden text-lg font-semibold tracking-tight min-[400px]:inline">
+              Carousel Prep
+            </span>
           </div>
           <div className="ml-auto flex items-center gap-3">
+            <ThemeSwitch value={theme.choice} onChange={theme.setChoice} />
             {exportBlocker && photos.length > 0 && (
               <span className="hidden text-sm text-graphite sm:inline">{exportBlocker}</span>
             )}

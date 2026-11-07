@@ -1,12 +1,16 @@
 @import "tailwindcss";
 @import "@fontsource-variable/schibsted-grotesk";
 
-/* Instagram palette: neutral app surfaces, brand gradient for primary actions, pink for marks. */
+/*
+ * Instagram palette: white (light) or black (dark) surfaces, brand gradient for primary
+ * actions, Instagram pink for marks. Theme follows the OS unless <html data-theme> is set.
+ */
 @theme {
   --font-sans: "Schibsted Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
 
-  --color-table: #fafafa;
+  --color-table: #ffffff;
   --color-sheet: #ffffff;
+  --color-well: #efefef;
   --color-ink: #262626;
   --color-graphite: #737373;
   --color-rule: #dbdbdb;
@@ -17,10 +21,15 @@
   --color-ok: #58c322;
 }
 
+:root {
+  color-scheme: light;
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --color-table: #000000;
     --color-sheet: #121212;
+    --color-well: #262626;
     --color-ink: #f5f5f5;
     --color-graphite: #a8a8a8;
     --color-rule: #363636;
@@ -29,7 +38,23 @@
     --color-marker-soft: #3a1322;
     --color-danger: #ff6b78;
     --color-ok: #78de45;
+    color-scheme: dark;
   }
+}
+
+:root[data-theme="dark"] {
+  --color-table: #000000;
+  --color-sheet: #121212;
+  --color-well: #262626;
+  --color-ink: #f5f5f5;
+  --color-graphite: #a8a8a8;
+  --color-rule: #363636;
+  --color-marker: #f0457e;
+  --color-marker-ink: #ffffff;
+  --color-marker-soft: #3a1322;
+  --color-danger: #ff6b78;
+  --color-ok: #78de45;
+  color-scheme: dark;
 }
 
 /* Instagram brand gradient (orange -> red -> magenta -> purple) for surfaces without text. */
@@ -40,10 +65,6 @@
 /* Deeper slice of the same gradient: keeps white button text at >= 4.5:1 contrast. */
 @utility bg-ig-strong {
   background-image: linear-gradient(45deg, #dc2743 0%, #cc2366 40%, #bc1888 75%, #8a3ab9 100%);
-}
-
-html {
-  color-scheme: light dark;
 }
 
 body {

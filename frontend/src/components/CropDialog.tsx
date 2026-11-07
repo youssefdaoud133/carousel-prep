@@ -57,7 +57,7 @@ export function CropDialog({ photo, fitMode, onFocusChange, onClose }: Props) {
             <p className="truncate text-sm text-graphite">{photo.filename}</p>
           </div>
 
-          <div className="grid place-items-center rounded-xl bg-table p-3">
+          <div className="grid place-items-center rounded-xl bg-well p-3">
             <div className="relative max-h-[50vh] overflow-hidden">
               <img
                 src={photo.thumbUrl}
